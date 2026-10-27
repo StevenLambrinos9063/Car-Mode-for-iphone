@@ -17,10 +17,20 @@ export function initMap() {
   setUnits();
   map = L.map('map', { zoomControl: false, attributionControl: true, center: lastPos || [39.8, -98.6], zoom: lastPos ? 16 : 3 });
   map.attributionControl.setPrefix(false);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  let tileErrors = 0;
+  const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
+    referrerPolicy: 'origin', // OpenStreetMap's tile servers want a Referer
+    crossOrigin: true,
     attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
+  tiles.on('tileload', () => { tileErrors = 0; if ($('map-status').dataset.tiles) { $('map-status').hidden = true; delete $('map-status').dataset.tiles; } });
+  tiles.on('tileerror', () => {
+    if (++tileErrors < 4) return;
+    const st = $('map-status');
+    st.hidden = false; st.dataset.tiles = '1';
+    st.textContent = navigator.onLine ? 'Map tiles blocked or failing to load' : 'Offline: map tiles unavailable';
+  });
   marker = L.marker(lastPos || [0, 0], {
     icon: L.divIcon({ className: 'me', html: '<div class="me-arrow">▲</div>', iconSize: [44, 44], iconAnchor: [22, 22] }),
     interactive: false, keyboard: false,
@@ -49,7 +59,7 @@ function onPosition(pos) {
   const { latitude, longitude, speed, heading } = pos.coords;
   lastPos = [latitude, longitude];
   store.set('lastPos', lastPos);
-  $('map-status').hidden = true;
+  if (!$('map-status').dataset.tiles) $('map-status').hidden = true;
   if (!map.hasLayer(marker)) marker.addTo(map);
   marker.setLatLng(lastPos);
   if (follow) map.setView(lastPos, map.getZoom() < 15 ? 16 : map.getZoom(), { animate: true });

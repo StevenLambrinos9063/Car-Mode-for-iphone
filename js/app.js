@@ -2,6 +2,7 @@ import { store } from './store.js';
 import { initTiles, renderTiles, setEditMode, isEditMode } from './tiles.js';
 import { initSpotify, updateAuthUI } from './spotify.js';
 import { initMap, showMap, setUnits } from './map.js';
+import { BUILD } from './config.js';
 import { handleRedirect, getClientId, redirectUri, logout, isLoggedIn } from './spotify-auth.js';
 
 const $ = (id) => document.getElementById(id);
@@ -37,6 +38,7 @@ function initSettings() {
     f.units.value = s().units || 'mph';
     f.scPrev.value = s().scPrev || ''; f.scPlay.value = s().scPlay || ''; f.scNext.value = s().scNext || '';
     $('redirect-uri').textContent = redirectUri();
+    $('build').textContent = BUILD;
     $('settings-logout').hidden = !isLoggedIn();
     $('settings-dialog').showModal();
   });
