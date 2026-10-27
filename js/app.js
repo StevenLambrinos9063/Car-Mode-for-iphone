@@ -32,6 +32,7 @@ function initSettings() {
   $('settings-btn').addEventListener('click', () => {
     f.clientId.value = getClientId();
     f.mapsMode.value = s().mapsMode || 'universal';
+    f.scPrev.value = s().scPrev || ''; f.scPlay.value = s().scPlay || ''; f.scNext.value = s().scNext || '';
     $('redirect-uri').textContent = redirectUri();
     $('settings-logout').hidden = !isLoggedIn();
     $('settings-dialog').showModal();
@@ -43,7 +44,7 @@ function initSettings() {
     const id = f.clientId.value.trim();
     if (id !== getClientId()) logout(); // tokens belong to the old client
     store.set('clientId', id);
-    store.set('settings', { ...s(), mapsMode: f.mapsMode.value });
+    store.set('settings', { ...s(), mapsMode: f.mapsMode.value, scPrev: f.scPrev.value.trim(), scPlay: f.scPlay.value.trim(), scNext: f.scNext.value.trim() });
     renderTiles(); updateAuthUI();
     $('settings-dialog').close();
   });

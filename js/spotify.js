@@ -2,7 +2,7 @@
 // Note: this app only *controls* Spotify. Audio plays from the Spotify app on the phone
 // (and reaches the car over Bluetooth). Playback control requires Spotify Premium.
 import { store } from './store.js';
-import { getToken, isLoggedIn, login } from './spotify-auth.js';
+import { getToken, isLoggedIn, login, getClientId } from './spotify-auth.js';
 
 const API = 'https://api.spotify.com/v1';
 const $ = (id) => document.getElementById(id);
@@ -147,7 +147,7 @@ async function loadPlaylists() {
   const cached = store.get('playlists');
   if (cached) drawPlaylists(cached);
   else grid.innerHTML = '<p class="empty">Loading playlists…</p>';
-  if (!isLoggedIn()) { grid.innerHTML = '<p class="empty">Log in with Spotify to see your playlists.</p>'; return; }
+  if (!isLoggedIn()) { grid.innerHTML = '<p class="empty">Log in with Spotify to see playlists here. Without that, add a playlist link as a tile on the Quick tab (Share → Copy link in Spotify).</p>'; return; }
   const r = await api('GET', '/me/playlists?limit=50');
   if (ok(r) && r.data?.items) {
     const lists = r.data.items.filter(Boolean).map((p) => ({
@@ -176,8 +176,21 @@ function drawPlaylists(lists) {
 }
 
 // ---------- Auth UI ----------
+function drawFallback() {
+  const cfg = store.get('settings', {});
+  const sc = (name) => (name ? 'shortcuts://run-shortcut?name=' + encodeURIComponent(name) : '');
+  let any = false;
+  for (const [id, key] of [['sc-prev', 'scPrev'], ['sc-play', 'scPlay'], ['sc-next', 'scNext']]) {
+    const a = $(id), href = sc(cfg[key]);
+    if (href) { a.href = href; any = true; } else a.removeAttribute('href');
+  }
+  $('sp-sc').hidden = !any;
+  $('sp-login-btn').hidden = !getClientId();
+}
+
 export function updateAuthUI() {
   const on = isLoggedIn();
+  if (!on) drawFallback();
   $('sp-login').hidden = on;
   $('sp-player').hidden = !on;
   if (on) startPolling(); else { stopPolling(); state = null; }

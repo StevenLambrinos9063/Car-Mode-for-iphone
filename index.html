@@ -28,8 +28,13 @@
     <!-- Spotify: always visible -->
     <section id="spotify" aria-label="Spotify">
       <div id="sp-login">
-        <p>Control Spotify from here.</p>
-        <button id="sp-login-btn" class="big-btn green" type="button">Log in with Spotify</button>
+        <a id="sp-open-big" class="big-btn green" href="spotify://">Open Spotify</a>
+        <div id="sp-sc" class="transport" hidden>
+          <a id="sc-prev" aria-label="Previous">⏮</a>
+          <a id="sc-play" class="main" aria-label="Play or pause">⏯</a>
+          <a id="sc-next" aria-label="Next">⏭</a>
+        </div>
+        <button id="sp-login-btn" class="link-btn" type="button" hidden>Log in with Spotify for now playing &amp; playlists</button>
         <p id="sp-login-msg" class="msg"></p>
       </div>
       <div id="sp-player" hidden>
@@ -87,6 +92,10 @@
       <h2>Settings</h2>
       <label>Spotify Client ID <input name="clientId" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
       <p class="hint">Redirect URI to register in the Spotify dashboard:<br><code id="redirect-uri"></code></p>
+      <p class="hint">Without a Spotify Client ID you can still control playback with Siri Shortcuts. Create three shortcuts using the "Play/Pause", "Next Song" and "Previous Song" actions, then enter their exact names:</p>
+      <label>Previous shortcut <input name="scPrev" autocomplete="off" autocapitalize="off"></label>
+      <label>Play/pause shortcut <input name="scPlay" autocomplete="off" autocapitalize="off"></label>
+      <label>Next shortcut <input name="scNext" autocomplete="off" autocapitalize="off"></label>
       <label>Open navigation with
         <select name="mapsMode">
           <option value="universal">Google Maps link (recommended)</option>
