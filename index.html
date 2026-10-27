@@ -12,6 +12,7 @@
   <meta name="format-detection" content="telephone=no">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="js/vendor/leaflet.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,52 +25,67 @@
     </div>
   </header>
 
-  <main>
-    <!-- Spotify: always visible -->
-    <section id="spotify" aria-label="Spotify">
-      <div id="sp-login">
-        <a id="sp-open-big" class="big-btn green" href="spotify://">Open Spotify</a>
-        <div id="sp-sc" class="transport" hidden>
-          <a id="sc-prev" aria-label="Previous">⏮</a>
-          <a id="sc-play" class="main" aria-label="Play or pause">⏯</a>
-          <a id="sc-next" aria-label="Next">⏭</a>
-        </div>
-        <button id="sp-login-btn" class="link-btn" type="button" hidden>Log in with Spotify for now playing &amp; playlists</button>
-        <p id="sp-login-msg" class="msg"></p>
-      </div>
-      <div id="sp-player" hidden>
-        <div class="np">
-          <div class="art-wrap"><img id="sp-art" alt="" hidden></div>
-          <div class="meta">
-            <div id="sp-title" class="title">Spotify</div>
-            <div id="sp-artist" class="artist"></div>
-            <div class="bar"><div id="sp-progress"></div></div>
-          </div>
-        </div>
-        <div class="transport">
-          <button id="sp-prev" type="button" aria-label="Previous">⏮</button>
-          <button id="sp-playpause" class="main" type="button" aria-label="Play">▶</button>
-          <button id="sp-next" type="button" aria-label="Next">⏭</button>
-        </div>
-        <div class="sp-foot">
-          <button id="sp-open" class="link-btn" type="button">Open Spotify app</button>
-          <span id="sp-status" class="msg" role="status"></span>
-        </div>
-      </div>
-    </section>
+  <div id="body">
+    <nav id="rail" class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="home" type="button"><i>🚗</i><span>Drive</span></button>
+      <button class="tab" role="tab" data-tab="nav" type="button"><i>🧭</i><span>Navigate</span></button>
+      <button class="tab" role="tab" data-tab="music" type="button"><i>🎵</i><span>Playlists</span></button>
+      <button class="tab" role="tab" data-tab="quick" type="button"><i>⚡</i><span>Quick</span></button>
+    </nav>
 
-    <!-- Tabbed content -->
-    <section id="panel">
-      <nav class="tabs" role="tablist">
-        <button class="tab" role="tab" data-tab="nav" type="button">🧭 Navigate</button>
-        <button class="tab" role="tab" data-tab="music" type="button">🎵 Playlists</button>
-        <button class="tab" role="tab" data-tab="quick" type="button">⚡ Quick</button>
-      </nav>
-      <div id="pane-nav" class="pane"><div id="nav-grid" class="grid"></div></div>
+    <main>
+      <!-- Drive: map + destinations + now playing, CarPlay style -->
+      <div id="pane-home" class="pane home">
+        <section id="map-card" aria-label="Map">
+          <div id="map"></div>
+          <div id="map-status" class="overlay">Finding your location…</div>
+          <div id="speed" class="overlay"><b id="speed-val">0</b><small id="speed-unit">mph</small></div>
+          <button id="recenter" class="overlay" type="button" aria-label="Recenter map" hidden>⌖</button>
+        </section>
+
+        <section id="dest-card" aria-label="Go to">
+          <div class="label">Go to</div>
+          <div id="home-grid" class="grid strip"></div>
+        </section>
+
+        <section id="spotify" aria-label="Spotify">
+          <div id="sp-login">
+            <a id="sp-open-big" class="big-btn green" href="spotify://">Open Spotify</a>
+            <div id="sp-sc" class="transport" hidden>
+              <a id="sc-prev" aria-label="Previous">⏮</a>
+              <a id="sc-play" class="main" aria-label="Play or pause">⏯</a>
+              <a id="sc-next" aria-label="Next">⏭</a>
+            </div>
+            <button id="sp-login-btn" class="link-btn" type="button" hidden>Log in with Spotify for now playing &amp; playlists</button>
+            <p id="sp-login-msg" class="msg"></p>
+          </div>
+          <div id="sp-player" hidden>
+            <div class="np">
+              <div class="art-wrap"><img id="sp-art" alt="" hidden></div>
+              <div class="meta">
+                <div id="sp-title" class="title">Spotify</div>
+                <div id="sp-artist" class="artist"></div>
+                <div class="bar"><div id="sp-progress"></div></div>
+              </div>
+            </div>
+            <div class="transport">
+              <button id="sp-prev" type="button" aria-label="Previous">⏮</button>
+              <button id="sp-playpause" class="main" type="button" aria-label="Play">▶</button>
+              <button id="sp-next" type="button" aria-label="Next">⏭</button>
+            </div>
+            <div class="sp-foot">
+              <button id="sp-open" class="link-btn" type="button">Open Spotify app</button>
+              <span id="sp-status" class="msg" role="status"></span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div id="pane-nav" class="pane" hidden><div id="nav-grid" class="grid"></div></div>
       <div id="pane-music" class="pane" hidden><div id="playlist-grid" class="grid"></div></div>
       <div id="pane-quick" class="pane" hidden><div id="quick-grid" class="grid"></div></div>
-    </section>
-  </main>
+    </main>
+  </div>
 
   <dialog id="tile-dialog">
     <form id="tile-form" method="dialog">
@@ -96,6 +112,9 @@
       <label>Previous shortcut <input name="scPrev" autocomplete="off" autocapitalize="off"></label>
       <label>Play/pause shortcut <input name="scPlay" autocomplete="off" autocapitalize="off"></label>
       <label>Next shortcut <input name="scNext" autocomplete="off" autocapitalize="off"></label>
+      <label>Speed units
+        <select name="units"><option value="mph">mph</option><option value="kmh">km/h</option></select>
+      </label>
       <label>Open navigation with
         <select name="mapsMode">
           <option value="universal">Google Maps link (recommended)</option>
@@ -111,6 +130,7 @@
     </form>
   </dialog>
 
+  <script src="js/vendor/leaflet.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>
