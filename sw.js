@@ -1,5 +1,5 @@
 // App-shell cache. Bump VERSION when you deploy changes.
-const VERSION = 'cm-v1';
+const VERSION = 'cm-v2';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
   'js/app.js', 'js/config.js', 'js/store.js', 'js/tiles.js',

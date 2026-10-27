@@ -97,3 +97,9 @@ code { color: var(--green); word-break: break-all; -webkit-user-select: all; use
 .row button { padding: 14px 20px; border-radius: 12px; background: var(--tile); font-size: 18px; font-weight: 600; }
 .row .primary { background: var(--blue); color: #000; }
 .row .danger { color: var(--red); }
+
+/* Spotify fallback (no Client ID): shortcut-based transport */
+#sp-login .transport { margin-top: 14px; }
+#sp-login .transport a { display: flex; align-items: center; justify-content: center; height: 92px; border-radius: 20px; background: var(--tile); font-size: 40px; text-decoration: none; }
+#sp-login .transport a.main { background: var(--green); color: #000; font-size: 48px; }
+#sp-login .big-btn { display: inline-block; text-decoration: none; }
