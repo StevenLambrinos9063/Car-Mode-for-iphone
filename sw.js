@@ -1,5 +1,5 @@
 // App-shell cache. Bump VERSION when you deploy changes.
-const VERSION = 'cm-v4';
+const VERSION = 'cm-v5';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
   'js/app.js', 'js/config.js', 'js/store.js', 'js/tiles.js',
@@ -20,19 +20,20 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Same-origin GETs: stale-while-revalidate. Spotify/Google calls are cross-origin and untouched.
+// Same-origin GETs: network first (so a deploy shows up on the very next open), cache as offline fallback.
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
   e.respondWith(
     caches.open(VERSION).then(async (cache) => {
-      // ignoreSearch so the OAuth callback (?code=...) still gets the shell offline
-      const hit = await cache.match(req, { ignoreSearch: true });
-      const net = fetch(req).then((res) => {
+      try {
+        const res = await fetch(req, { cache: 'no-cache' });
         if (res.ok) cache.put(req, res.clone());
         return res;
-      }).catch(() => hit);
-      return hit || net;
+      } catch {
+        // ignoreSearch so the OAuth callback (?code=...) still gets the shell offline
+        return (await cache.match(req, { ignoreSearch: true })) || Response.error();
+      }
     })
   );
 });
