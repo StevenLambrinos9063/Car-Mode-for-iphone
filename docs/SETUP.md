@@ -35,7 +35,7 @@ After deploying changes, bump `VERSION` in `sw.js` so phones pick up the new fil
 
 ## 4. Using it
 
-- **Drive tab** (home): live map following your GPS, speed, your nav destinations and now playing, CarPlay style. Allow Location when iOS asks (Settings → Privacy → Location Services → Safari Websites / Car Mode if it was refused). The map only updates while Car Mode is open in the foreground.
+- **Drive tab** (home): live map following your GPS (OpenStreetMap tiles, no key needed), speed, your nav destinations and now playing, CarPlay style. Allow Location when iOS asks (Settings → Privacy → Location Services → Safari Websites / Car Mode if it was refused). The map only updates while Car Mode is open in the foreground.
 
 - **Navigate tab** (and the "Go to" strip on the Drive tab): tap Home / Work to start Google Maps driving directions. Google Maps takes over the screen while navigating; switch back to Car Mode when you want the dashboard. Tap ✎ to edit tiles, then a tile (or ＋) to set an address.
 - **Quick tab**: call favourites (`tel:`), Messages (`sms:`), Siri Shortcuts (`shortcuts://run-shortcut?name=…`, use the exact shortcut name) or any URL.

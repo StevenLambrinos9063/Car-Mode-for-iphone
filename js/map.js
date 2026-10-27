@@ -1,4 +1,4 @@
-// Live map that follows your GPS position (Leaflet + CARTO dark tiles over OpenStreetMap data).
+// Live map that follows your GPS position (Leaflet + OpenStreetMap tiles, darkened with CSS).
 // Turn-by-turn navigation is handed off to Google Maps; this is the "where am I" screen.
 import { store } from './store.js';
 
@@ -17,9 +17,9 @@ export function initMap() {
   setUnits();
   map = L.map('map', { zoomControl: false, attributionControl: true, center: lastPos || [39.8, -98.6], zoom: lastPos ? 16 : 3 });
   map.attributionControl.setPrefix(false);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/attributions">CARTO</a>',
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
   marker = L.marker(lastPos || [0, 0], {
     icon: L.divIcon({ className: 'me', html: '<div class="me-arrow">▲</div>', iconSize: [44, 44], iconAnchor: [22, 22] }),
