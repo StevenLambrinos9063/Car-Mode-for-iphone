@@ -172,3 +172,6 @@ code { color: var(--green); word-break: break-all; -webkit-user-select: all; use
   .home .sp-foot { display: none; }
   .home .big-btn { padding: 10px 20px; font-size: 20px; }
 }
+
+/* OSM tiles are light: invert them into a dark map (roads stay readable, colours roughly preserved) */
+.leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.8); }
