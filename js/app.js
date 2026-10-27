@@ -1,6 +1,7 @@
 import { store } from './store.js';
 import { initTiles, renderTiles, setEditMode, isEditMode } from './tiles.js';
 import { initSpotify, updateAuthUI } from './spotify.js';
+import { initMap, showMap, setUnits } from './map.js';
 import { handleRedirect, getClientId, redirectUri, logout, isLoggedIn } from './spotify-auth.js';
 
 const $ = (id) => document.getElementById(id);
@@ -17,6 +18,7 @@ function showTab(name) {
   document.querySelectorAll('.tab').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
   document.querySelectorAll('.pane').forEach((p) => { p.hidden = p.id !== 'pane-' + name; });
   store.set('tab', name);
+  if (name === 'home') showMap();
 }
 
 // ---------- Keep the screen on (iOS 16.4+ home screen apps) ----------
@@ -32,6 +34,7 @@ function initSettings() {
   $('settings-btn').addEventListener('click', () => {
     f.clientId.value = getClientId();
     f.mapsMode.value = s().mapsMode || 'universal';
+    f.units.value = s().units || 'mph';
     f.scPrev.value = s().scPrev || ''; f.scPlay.value = s().scPlay || ''; f.scNext.value = s().scNext || '';
     $('redirect-uri').textContent = redirectUri();
     $('settings-logout').hidden = !isLoggedIn();
@@ -44,8 +47,8 @@ function initSettings() {
     const id = f.clientId.value.trim();
     if (id !== getClientId()) logout(); // tokens belong to the old client
     store.set('clientId', id);
-    store.set('settings', { ...s(), mapsMode: f.mapsMode.value, scPrev: f.scPrev.value.trim(), scPlay: f.scPlay.value.trim(), scNext: f.scNext.value.trim() });
-    renderTiles(); updateAuthUI();
+    store.set('settings', { ...s(), mapsMode: f.mapsMode.value, units: f.units.value, scPrev: f.scPrev.value.trim(), scPlay: f.scPlay.value.trim(), scNext: f.scNext.value.trim() });
+    renderTiles(); updateAuthUI(); setUnits();
     $('settings-dialog').close();
   });
 }
@@ -53,7 +56,8 @@ function initSettings() {
 async function main() {
   tickClock(); setInterval(tickClock, 5000);
   document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
-  showTab(store.get('tab', 'nav'));
+  initMap();
+  showTab(store.get('tab', 'home'));
   $('edit-btn').addEventListener('click', () => {
     setEditMode(!isEditMode());
     $('edit-btn').setAttribute('aria-pressed', String(isEditMode()));

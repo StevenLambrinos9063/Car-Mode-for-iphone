@@ -1,9 +1,10 @@
 // App-shell cache. Bump VERSION when you deploy changes.
-const VERSION = 'cm-v2';
+const VERSION = 'cm-v3';
 const SHELL = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
   'js/app.js', 'js/config.js', 'js/store.js', 'js/tiles.js',
-  'js/spotify-auth.js', 'js/spotify.js',
+  'js/spotify-auth.js', 'js/spotify.js', 'js/map.js',
+  'js/vendor/leaflet.js', 'js/vendor/leaflet.css',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
 ];
 

@@ -29,10 +29,38 @@ h1 { margin: 0; font-size: 22px; font-weight: 600; color: var(--dim); letter-spa
 .icon-btn { width: 52px; height: 52px; border-radius: 14px; background: var(--panel); font-size: 24px; color: var(--dim); }
 .icon-btn[aria-pressed="true"] { background: var(--amber); color: #000; }
 
-/* Layout: landscape = player left, tiles right */
-main { flex: 1; min-height: 0; display: grid; grid-template-columns: 5fr 7fr; gap: var(--gap); padding: 0 var(--gap) var(--gap); }
-@media (orientation: portrait) { main { grid-template-columns: 1fr; grid-template-rows: auto 1fr; } }
+/* Layout: left rail of big tabs + content (rail drops to the bottom in portrait) */
+#body { flex: 1; min-height: 0; display: flex; gap: var(--gap); padding: 0 var(--gap) var(--gap); }
+main { flex: 1; min-width: 0; min-height: 0; position: relative; }
+@media (orientation: portrait) { #body { flex-direction: column-reverse; } }
 section { background: var(--panel); border-radius: var(--r); padding: var(--gap); min-height: 0; display: flex; flex-direction: column; }
+
+/* Drive screen */
+.home { overflow: hidden !important; display: grid; gap: var(--gap); grid-template-columns: 1.3fr 1fr; grid-template-rows: auto 1fr; }
+#map-card { grid-row: 1 / 3; padding: 0; position: relative; overflow: hidden; }
+#dest-card { padding: 10px var(--gap) var(--gap); }
+#dest-card .label { color: var(--dim); font-size: 14px; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 8px; }
+@media (orientation: portrait) {
+  .home { grid-template-columns: 1fr; grid-template-rows: 1fr auto auto; }
+  #map-card { grid-row: 1; }
+}
+#map { position: absolute; inset: 0; background: #0b0d11; }
+.overlay { position: absolute; z-index: 500; }
+#map-status { left: 12px; right: 12px; top: 12px; padding: 10px 14px; border-radius: 12px; background: rgba(0,0,0,.75); color: var(--amber); font-size: 16px; text-align: center; }
+#speed { left: 12px; bottom: 12px; padding: 8px 16px; border-radius: 16px; background: rgba(0,0,0,.72); display: flex; align-items: baseline; gap: 6px; }
+#speed b { font-size: 44px; font-variant-numeric: tabular-nums; }
+#speed small { color: var(--dim); font-size: 16px; }
+#recenter { right: 12px; top: 12px; width: 64px; height: 64px; border-radius: 18px; background: var(--blue); color: #000; font-size: 34px; }
+.me { background: none; border: 0; }
+.me-arrow { width: 44px; height: 44px; border-radius: 50%; background: var(--blue); border: 3px solid #fff; color: #fff; font-size: 22px; line-height: 38px; text-align: center; box-shadow: 0 0 0 6px rgba(76,157,255,.3); transition: transform .3s; }
+.leaflet-container { background: #0b0d11; font: inherit; }
+.leaflet-control-attribution { font-size: 9px !important; background: rgba(0,0,0,.5) !important; color: var(--dim) !important; }
+.leaflet-control-attribution a { color: var(--dim) !important; }
+.grid.strip { grid-auto-flow: column; grid-template-columns: none; grid-auto-columns: minmax(118px, 1fr); overflow-x: auto; }
+.grid.strip .tile { min-height: 92px; }
+.grid.strip .tile i { font-size: 32px; }
+.grid.strip .tile span { font-size: 18px; }
+.grid.strip .tile small:empty { display: none; }
 
 /* Player */
 #sp-player { display: flex; flex-direction: column; height: 100%; gap: 12px; min-height: 0; }
@@ -55,11 +83,13 @@ section { background: var(--panel); border-radius: var(--r); padding: var(--gap)
 .big-btn { padding: 22px 34px; border-radius: 20px; font-size: 26px; font-weight: 700; }
 .big-btn.green { background: var(--green); color: #000; }
 
-/* Tabs */
-.tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: var(--gap); flex: none; }
-.tab { height: 64px; border-radius: 16px; background: var(--tile); color: var(--dim); font-size: 21px; font-weight: 600; }
+/* Rail */
+.tabs { display: flex; flex-direction: column; gap: 10px; width: 108px; flex: none; }
+.tab { flex: 1; border-radius: 18px; background: var(--tile); color: var(--dim); font-size: 15px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+.tab i { font-style: normal; font-size: 32px; line-height: 1; }
 .tab[aria-selected="true"] { background: var(--blue); color: #000; }
-.pane { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; }
+@media (orientation: portrait) { .tabs { flex-direction: row; width: auto; height: 84px; } }
+.pane { height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; min-height: 0; }
 .pane[hidden] { display: none; }
 
 /* Tiles */
@@ -103,3 +133,42 @@ code { color: var(--green); word-break: break-all; -webkit-user-select: all; use
 #sp-login .transport a { display: flex; align-items: center; justify-content: center; height: 92px; border-radius: 20px; background: var(--tile); font-size: 40px; text-decoration: none; }
 #sp-login .transport a.main { background: var(--green); color: #000; font-size: 48px; }
 #sp-login .big-btn { display: inline-block; text-decoration: none; }
+
+/* Compact player inside the Drive screen */
+#spotify { justify-content: center; }
+.home .art-wrap { max-height: 96px; }
+.home .title { font-size: 22px; -webkit-line-clamp: 1; }
+.home .artist { font-size: 18px; margin-top: 2px; }
+.home .bar { margin-top: 8px; }
+.home .transport button, .home #sp-login .transport a { height: 68px; font-size: 34px; border-radius: 16px; }
+.home .transport button.main { font-size: 40px; }
+.home .big-btn { padding: 14px 24px; font-size: 22px; }
+.home .sp-foot { min-height: 0; }
+.home .link-btn { font-size: 15px; padding: 2px 0; }
+
+#clock, #date { white-space: nowrap; }
+@media (orientation: portrait) { #clock { font-size: 32px; } #date { display: none; } }
+
+/* Short landscape screens (iPhone on a dash mount): squeeze the Drive cards to fit */
+@media (orientation: landscape) and (max-height: 460px) {
+  header { padding: 4px 16px; }
+  #clock { font-size: 34px; }
+  .icon-btn { width: 46px; height: 46px; }
+  #dest-card { padding: 8px 12px 10px; }
+  #dest-card .label { display: none; }
+  .grid.strip .tile { min-height: 78px; padding: 6px; gap: 2px; }
+  .grid.strip .tile i { font-size: 28px; }
+  .grid.strip .tile span { font-size: 17px; }
+  .grid.strip .tile small { font-size: 12px; min-height: 0; }
+  #spotify { padding: 10px 12px; }
+  .home #sp-player { gap: 8px; }
+  .home .np { flex: none; gap: 12px; }
+  .home .art-wrap { height: 62px; width: 62px; max-height: none; border-radius: 12px; }
+  .home .title { font-size: 20px; }
+  .home .artist { font-size: 16px; }
+  .home .bar { margin-top: 6px; }
+  .home .transport { gap: 10px; }
+  .home .transport button, .home #sp-login .transport a { height: 58px; font-size: 30px; }
+  .home .sp-foot { display: none; }
+  .home .big-btn { padding: 10px 20px; font-size: 20px; }
+}

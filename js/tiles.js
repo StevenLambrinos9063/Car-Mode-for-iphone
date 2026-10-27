@@ -57,11 +57,11 @@ function tileEl(t) {
 }
 
 export function renderTiles() {
-  for (const group of ['nav', 'quick']) {
-    const grid = $(group + '-grid');
+  for (const [group, id, withAdd] of [['nav', 'nav-grid', true], ['quick', 'quick-grid', true], ['nav', 'home-grid', false]]) {
+    const grid = $(id);
     grid.textContent = '';
     tiles.filter((t) => t.group === group).forEach((t) => grid.append(tileEl(t)));
-    if (editMode) {
+    if (editMode && withAdd) {
       const add = document.createElement('button');
       add.type = 'button';
       add.className = 'tile add';

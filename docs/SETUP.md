@@ -35,7 +35,9 @@ After deploying changes, bump `VERSION` in `sw.js` so phones pick up the new fil
 
 ## 4. Using it
 
-- **Navigate tab**: tap Home / Work to start Google Maps driving directions. Tap ✎ to edit tiles, then a tile (or ＋) to set an address.
+- **Drive tab** (home): live map following your GPS, speed, your nav destinations and now playing, CarPlay style. Allow Location when iOS asks (Settings → Privacy → Location Services → Safari Websites / Car Mode if it was refused). The map only updates while Car Mode is open in the foreground.
+
+- **Navigate tab** (and the "Go to" strip on the Drive tab): tap Home / Work to start Google Maps driving directions. Google Maps takes over the screen while navigating; switch back to Car Mode when you want the dashboard. Tap ✎ to edit tiles, then a tile (or ＋) to set an address.
 - **Quick tab**: call favourites (`tel:`), Messages (`sms:`), Siri Shortcuts (`shortcuts://run-shortcut?name=…`, use the exact shortcut name) or any URL.
 - **Playlists tab**: tap a tile to play. If Spotify isn't active, Car Mode opens the Spotify app and retries playback when you switch back.
 - Audio is played by the Spotify app and goes to the RCD-510 over Bluetooth as normal. Car Mode is just the remote.
