@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Car Mode</title>
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Car Mode">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Driving</h1>
+    <div class="time"><span id="clock">--:--</span><span id="date"></span></div>
+    <div class="hdr-btns">
+      <button id="edit-btn" class="icon-btn" type="button" aria-pressed="false" aria-label="Edit tiles">✎</button>
+      <button id="settings-btn" class="icon-btn" type="button" aria-label="Settings">⚙︎</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Spotify: always visible -->
+    <section id="spotify" aria-label="Spotify">
+      <div id="sp-login">
+        <p>Control Spotify from here.</p>
+        <button id="sp-login-btn" class="big-btn green" type="button">Log in with Spotify</button>
+        <p id="sp-login-msg" class="msg"></p>
+      </div>
+      <div id="sp-player" hidden>
+        <div class="np">
+          <div class="art-wrap"><img id="sp-art" alt="" hidden></div>
+          <div class="meta">
+            <div id="sp-title" class="title">Spotify</div>
+            <div id="sp-artist" class="artist"></div>
+            <div class="bar"><div id="sp-progress"></div></div>
+          </div>
+        </div>
+        <div class="transport">
+          <button id="sp-prev" type="button" aria-label="Previous">⏮</button>
+          <button id="sp-playpause" class="main" type="button" aria-label="Play">▶</button>
+          <button id="sp-next" type="button" aria-label="Next">⏭</button>
+        </div>
+        <div class="sp-foot">
+          <button id="sp-open" class="link-btn" type="button">Open Spotify app</button>
+          <span id="sp-status" class="msg" role="status"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabbed content -->
+    <section id="panel">
+      <nav class="tabs" role="tablist">
+        <button class="tab" role="tab" data-tab="nav" type="button">🧭 Navigate</button>
+        <button class="tab" role="tab" data-tab="music" type="button">🎵 Playlists</button>
+        <button class="tab" role="tab" data-tab="quick" type="button">⚡ Quick</button>
+      </nav>
+      <div id="pane-nav" class="pane"><div id="nav-grid" class="grid"></div></div>
+      <div id="pane-music" class="pane" hidden><div id="playlist-grid" class="grid"></div></div>
+      <div id="pane-quick" class="pane" hidden><div id="quick-grid" class="grid"></div></div>
+    </section>
+  </main>
+
+  <dialog id="tile-dialog">
+    <form id="tile-form" method="dialog">
+      <h2 id="tile-title">Tile</h2>
+      <label>Type <select name="kind"></select></label>
+      <label>Name <input name="label" autocomplete="off" maxlength="24" placeholder="Mum"></label>
+      <label>Icon (emoji) <input name="icon" autocomplete="off" maxlength="4" placeholder="🏠"></label>
+      <label>Address / number / name <input name="value" autocomplete="off" autocapitalize="off"></label>
+      <div class="row">
+        <button type="button" id="tile-delete" class="danger">Delete</button>
+        <span class="grow"></span>
+        <button type="button" id="tile-cancel">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog">
+    <form id="settings-form" method="dialog">
+      <h2>Settings</h2>
+      <label>Spotify Client ID <input name="clientId" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <p class="hint">Redirect URI to register in the Spotify dashboard:<br><code id="redirect-uri"></code></p>
+      <label>Open navigation with
+        <select name="mapsMode">
+          <option value="universal">Google Maps link (recommended)</option>
+          <option value="app">Google Maps app scheme (comgooglemaps://)</option>
+        </select>
+      </label>
+      <div class="row">
+        <button type="button" id="settings-logout" class="danger" hidden>Log out of Spotify</button>
+        <span class="grow"></span>
+        <button type="button" id="settings-cancel">Cancel</button>
+        <button type="submit" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
